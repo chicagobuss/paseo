@@ -550,6 +550,7 @@ several methods and `params.authMethod` is unset, the error lists them.
     "providers": {
       "antigravity": {
         "extends": "acp",
+        "label": "Antigravity",
         "command": ["/path/to/agy_acp_server.par", "--uid="],
         "params": { "authMethod": "oauth-personal" }
       }

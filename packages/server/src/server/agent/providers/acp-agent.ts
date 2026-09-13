@@ -171,8 +171,14 @@ function selectACPAuthMethod(
   methods: readonly AuthMethod[],
   configured: string | undefined,
 ): ACPAuthMethodSelection {
+  if (methods.length === 0) {
+    return {
+      error:
+        "The agent advertised no authentication methods in initialize; sign in with the agent's own CLI.",
+    };
+  }
   if (configured) {
-    if (methods.length === 0 || methods.some((method) => method.id === configured)) {
+    if (methods.some((method) => method.id === configured)) {
       return { methodId: configured };
     }
     return {
@@ -182,12 +188,6 @@ function selectACPAuthMethod(
   const only = methods[0];
   if (methods.length === 1 && only) {
     return { methodId: only.id };
-  }
-  if (methods.length === 0) {
-    return {
-      error:
-        "The agent advertised no authentication methods in initialize; sign in with the agent's own CLI.",
-    };
   }
   return {
     error: `Set params.authMethod to one of the agent's methods: ${describeACPAuthMethods(methods)}.`,

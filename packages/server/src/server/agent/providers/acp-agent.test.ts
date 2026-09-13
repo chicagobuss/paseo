@@ -4192,6 +4192,20 @@ describe("ACP authentication on session open (#477)", () => {
     expect(authenticate).not.toHaveBeenCalled();
   });
 
+  test("rejects a configured method when the agent advertises none", async () => {
+    const newSession = vi.fn().mockRejectedValue(authRequired());
+    const { session, authenticate } = makeSession({
+      authMethods: [],
+      authMethod: "oauth-personal",
+      newSession,
+    });
+
+    await expect(session.initializeNewSession()).rejects.toThrow(
+      /advertised no authentication methods/,
+    );
+    expect(authenticate).not.toHaveBeenCalled();
+  });
+
   test("also covers session/load when resuming", async () => {
     const loadSession = vi
       .fn()
