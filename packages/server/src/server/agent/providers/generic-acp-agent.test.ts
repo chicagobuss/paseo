@@ -28,7 +28,7 @@ vi.mock("./acp-agent.js", () => ({
   },
 }));
 
-import { GenericACPAgentClient } from "./generic-acp-agent.js";
+import { GenericACPAgentClient, GenericACPProviderParamsSchema } from "./generic-acp-agent.js";
 
 describe("GenericACPAgentClient", () => {
   test("passes the custom command only as defaultCommand", () => {
@@ -81,5 +81,15 @@ describe("GenericACPAgentClient", () => {
         supportsMcpServers: false,
       },
     });
+  });
+});
+
+describe("GenericACPProviderParamsSchema authMethod", () => {
+  it("accepts a non-empty authMethod and rejects an empty one", () => {
+    expect(GenericACPProviderParamsSchema.parse({ authMethod: "oauth-personal" })).toEqual({
+      authMethod: "oauth-personal",
+    });
+    expect(GenericACPProviderParamsSchema.parse({})).toEqual({});
+    expect(() => GenericACPProviderParamsSchema.parse({ authMethod: "  " })).toThrow();
   });
 });
