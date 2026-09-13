@@ -4035,20 +4035,23 @@ describe("ACP session/load invariant — cwd and mcpServers always passed", () =
   });
 });
 
+/** Setup for a session whose agent may demand sign-in; unset request mocks succeed. */
+interface AuthTestSessionOptions {
+  authMethods?: Array<{ id: string; name: string }>;
+  authMethod?: string;
+  newSession?: ReturnType<typeof vi.fn>;
+  loadSession?: ReturnType<typeof vi.fn>;
+  authenticate?: ReturnType<typeof vi.fn>;
+  handle?: { provider: string; sessionId: string };
+}
+
 describe("ACP authentication on session open (#477)", () => {
   const oauthPersonal = { id: "oauth-personal", name: "Log in with Google" };
   const apiKey = { id: "gemini-api-key", name: "Gemini API key" };
   const authRequired = () => new RequestError(-32000, "Authentication required");
   const openedSession = { sessionId: "session-1", modes: null, models: null, configOptions: [] };
 
-  function makeSession(args: {
-    authMethods?: Array<{ id: string; name: string }>;
-    authMethod?: string;
-    newSession?: ReturnType<typeof vi.fn>;
-    loadSession?: ReturnType<typeof vi.fn>;
-    authenticate?: ReturnType<typeof vi.fn>;
-    handle?: { provider: string; sessionId: string };
-  }) {
+  function makeSession(args: AuthTestSessionOptions) {
     const newSession = args.newSession ?? vi.fn().mockResolvedValue(openedSession);
     const loadSession = args.loadSession ?? vi.fn().mockResolvedValue(openedSession);
     const authenticate = args.authenticate ?? vi.fn().mockResolvedValue({});
