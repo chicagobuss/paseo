@@ -9,7 +9,7 @@ import {
 import type { ReleaseChannel } from "@/hooks/use-settings";
 import { i18n } from "@/i18n/i18next";
 
-const DESKTOP_SETTINGS_QUERY_KEY = ["desktop-settings"] as const;
+export const DESKTOP_SETTINGS_QUERY_KEY = ["desktop-settings"] as const;
 
 export interface DesktopSettings {
   releaseChannel: ReleaseChannel;
